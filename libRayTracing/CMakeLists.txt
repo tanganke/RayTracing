@@ -1,0 +1,5 @@
+file(GLOB SOURCES src/*.cpp)
+add_library(RayTracing ${SOURCES})
+target_include_directories(RayTracing PUBLIC ${CMAKE_CURRENT_LIST_DIR})
+target_include_directories(RayTracing PRIVATE ${CMAKE_CURRENT_LIST_DIR}/RayTracing)
+target_link_libraries(RayTracing PRIVATE ${OPENCV_LIBRARIES})
