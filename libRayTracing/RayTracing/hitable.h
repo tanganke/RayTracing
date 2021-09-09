@@ -12,7 +12,7 @@ namespace ray_tracing
         material *material;
     };
 
-    class Hitable
+    class hitable
     {
     public:
         /**

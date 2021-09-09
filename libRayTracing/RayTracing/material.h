@@ -24,18 +24,26 @@ namespace ray_tracing
     class lambertian : public material
     {
     public:
-        lambertian(const vec3 &a) : albedo(a) {}
+        vec3 albedo;
+        float fuzziness;
+        bool reflectable;
+
+    public:
+        lambertian(const vec3 &albedo_color, float fuzziness_ = 0, bool reflectable_ = true)
+            : albedo(albedo_color), fuzziness(fuzziness_), reflectable(reflectable_) {}
         virtual bool scatter(const ray &r_in, const hit_record &rec,
                              vec3 &out_color, ray &out_scattered) const override
         {
-            auto target = rec.position + rec.normal + random_vec3_in_unit_sphere();
-            out_scattered = ray(rec.position, target - rec.position);
             out_color = albedo;
-            return true;
+            if (reflectable)
+            {
+                auto target = rec.position + rec.normal + random_vec3_in_unit_sphere();
+                out_scattered = ray(rec.position, target - rec.position);
+                return true;
+            }
+            else
+                return false; // no scattered ray out
         }
-
-    private:
-        vec3 albedo;
     };
 
 }
