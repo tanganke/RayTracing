@@ -4,10 +4,10 @@ namespace ray_tracing
 {
     const vec3 DEBUG_COLOR{0.8, 0, 0.2};
 
-    vec3 ray_color(const ray &r, hittable *world, int depth)
+    vec3 ray_color(const ray &r, const hittable &world, int depth)
     {
         hit_record rec;
-        if (world->hit(r, 0.001, MAXFLOAT, rec))
+        if (world.hit(r, 0.001, MAXFLOAT, rec))
         {
             ray scattered;
             vec3 attenuation;
@@ -31,4 +31,13 @@ namespace ray_tracing
         }
     }
 
+    vec3 ray_color(const std::vector<ray> &r, const hittable &world, int depth)
+    {
+        std::vector<vec3> colors(r.size());
+        std::transform(std::execution::par_unseq,
+                       r.begin(), r.end(), colors.begin(),
+                       [&](const ray &r) -> vec3
+                       { return ray_color(r, world, 0); });
+        return std::accumulate(colors.begin(), colors.end(), vec3{0, 0, 0}) / r.size();
+    }
 }

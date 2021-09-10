@@ -26,6 +26,7 @@ namespace ray_tracing
 
     inline vec3 operator*(double a, const vec3 &v) { return float(a) * v; }
     inline vec3 operator*(const vec3 &v, double a) { return float(a) * v; }
+    inline vec3 operator/(const vec3 &v, float a) { return vec3{v.x / a, v.y / a, v.z / a}; }
 
     inline float squared_length(const vec3 &a) { return glm::dot(a, a); }
     inline float length(const vec3 &a) { return std::sqrt(squared_length(a)); }
