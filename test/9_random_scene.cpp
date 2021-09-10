@@ -24,8 +24,8 @@ TEST_CASE("random_scene", "[random_scene]")
        << nx << ' ' << ny << "\n255\n";
 
     hittable_vector world;
-    for (float x = -11; x <= 11; x++)
-        for (float y = -11; y <= 11; y++)
+    for (float x = -3; x <= 3; x += random<float>(0, 0.3))
+        for (float y = -3; y <= 3; y += random<float>(0, 0.3))
         {
             float r = 0.2 * random<float>();
             if (random<int>())
@@ -40,7 +40,7 @@ TEST_CASE("random_scene", "[random_scene]")
         .push_back(std::make_shared<sphere>(vec3{-1, 0, -1}, 0.5, std::make_shared<dielectric>(1.5)))
         .push_back(std::make_shared<sphere>(vec3{-1, 0, -1}, -0.45, std::make_shared<dielectric>(1.5)));
 
-    camera cam(vec3{-5, 1, 5}, vec3{0, 0, -1}, vec3{0, 1, 0}, degree_to_radian(90), float(nx) / ny);
+    camera cam(vec3{-0.3, 0, 0.2}, vec3{0, 0, -1}, vec3{0, 1, 0}, degree_to_radian(90), float(nx) / ny);
 
     indicators::ProgressBar bar{
         indicators::option::BarWidth{50},
