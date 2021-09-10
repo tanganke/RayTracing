@@ -25,13 +25,13 @@ TEST_CASE("random_scene", "[random_scene]")
 
     hittable_vector world;
     for (float x = -3; x <= 3; x += random<float>(0, 0.3))
-        for (float y = -3; y <= 3; y += random<float>(0, 0.3))
+        for (float y = -3; y <= 3; y += random<float>(0.3, 0.5))
         {
-            float r = 0.2 * random<float>();
+            float r = 0.15 * random<float>();
             if (random<int>())
-                world.push_back(std::make_shared<sphere>(vec3{x, r + r * 0.5 * random<float>(), y}, r, std::make_shared<lambertian>(random<vec3>())));
+                world.push_back(std::make_shared<sphere>(vec3{x, -0.5f + r + r * 0.5f * random<float>(), y}, r, std::make_shared<lambertian>(random<vec3>())));
             else
-                world.push_back(std::make_shared<sphere>(vec3{x, r + r * 0.5 * random<float>(), y}, r, std::make_shared<metal>(random<vec3>())));
+                world.push_back(std::make_shared<sphere>(vec3{x, -0.5f + r + r * 0.5f * random<float>(), y}, r, std::make_shared<metal>(random<vec3>())));
         }
 
     world.push_back(std::make_shared<sphere>(vec3{0, 0, -1}, 0.5, std::make_shared<lambertian>(vec3{0.8, 0.3, 0.3})))
