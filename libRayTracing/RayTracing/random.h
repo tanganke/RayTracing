@@ -17,13 +17,5 @@ namespace ray_tracing
     inline vec3 random_vec3() { return vec3(random<float>(), random<float>(), random<float>()); }
     inline vec3 random_vec3(float min_, float max_) { return min_ + random_vec3() * (max_ - min_); }
 
-    vec3 random_vec3_in_unit_sphere()
-    {
-        vec3 ans;
-    TRY:
-        ans = random_vec3(-1, 1);
-        if (length(ans) >= 1)
-            goto TRY;
-        return ans;
-    }
+    vec3 random_vec3_in_unit_sphere();
 }

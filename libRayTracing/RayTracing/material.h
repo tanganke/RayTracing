@@ -7,6 +7,7 @@ namespace ray_tracing
 {
     class material
     {
+    public:
         /**
          * @brief 
          * 
@@ -41,14 +42,14 @@ namespace ray_tracing
         }
     };
 
-    class matal : public material
+    class metal : public material
     {
     public:
         vec3 albedo;
         float fuzziness;
 
     public:
-        matal(const vec3 &albedo_, float fuzz_ = 0) : albedo(albedo_), fuzziness(fuzz_)
+        metal(const vec3 &albedo_, float fuzz_ = 0) : albedo(albedo_), fuzziness(fuzz_)
         {
             fuzziness = fuzz_;
             fuzziness = clamp(fuzziness, 0, 1);
@@ -67,6 +68,28 @@ namespace ray_tracing
             }
             out_color = albedo;
             return dot(out_scattered.direction, rec.normal) > 0;
+        }
+    };
+
+    class dielectric : public material
+    {
+    public:
+        float index_of_refraction;
+
+    public:
+        dielectric(float index_of_refraction_) : index_of_refraction{index_of_refraction_} {}
+
+        virtual bool scatter(const ray &r_in, const hit_record &rec, vec3 &out_color, ray &out_scattered) const
+        {
+            out_color = vec3{1, 1, 1};
+            float ni_over_nt = rec.front_face ? (1 / index_of_refraction) : index_of_refraction;
+            bool is_total_reflection;
+            auto refracted = refract(r_in.direction, rec.normal, ni_over_nt, is_total_reflection);
+            if (is_total_reflection)
+                out_scattered = ray{rec.position, reflect(r_in.direction, rec.normal)};
+            else
+                out_scattered = ray{rec.position, refracted};
+            return true;
         }
     };
 

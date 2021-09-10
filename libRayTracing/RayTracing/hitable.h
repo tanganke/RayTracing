@@ -76,4 +76,5 @@ namespace ray_tracing
             return hit_anything;
         }
     };
+
 }
