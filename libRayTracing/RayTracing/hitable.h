@@ -1,6 +1,5 @@
 #pragma once
 #include "ray.h"
-#include "material.h"
 #include <memory>
 #include <vector>
 #include <algorithm>

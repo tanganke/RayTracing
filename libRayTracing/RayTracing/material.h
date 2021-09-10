@@ -5,6 +5,7 @@
 
 namespace ray_tracing
 {
+    
     class material
     {
     public:

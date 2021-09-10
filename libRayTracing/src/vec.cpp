@@ -2,6 +2,8 @@
 
 namespace ray_tracing
 {
+    const float DEGREE = M_PI / 180;
+
     vec3 refract(const vec3 &v, const vec3 &n, float ni_over_nt)
     {
         auto unit_v = unit_vector(v);

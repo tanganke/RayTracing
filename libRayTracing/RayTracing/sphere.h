@@ -33,8 +33,11 @@ namespace ray_tracing
                     out_record.ray_parameter = temp;
                     out_record.position = r.point_at_parameter(temp);
                     out_record.normal = (out_record.position - center) / radius;
+                    if (radius > 0)
+                        out_record.front_face = true;
+                    else
+                        out_record.front_face = false;
                     out_record.mat_ptr = mat.get();
-                    out_record.front_face = true;
                     return true;
                 }
                 temp = (-b + sqrt(discriminant)) / (2 * a);
@@ -43,7 +46,10 @@ namespace ray_tracing
                     out_record.ray_parameter = temp;
                     out_record.position = r.point_at_parameter(temp);
                     out_record.normal = (out_record.position - center) / radius;
-                    out_record.front_face = false;
+                    if (radius > 0)
+                        out_record.front_face = false;
+                    else
+                        out_record.front_face = true;
                     out_record.mat_ptr = mat.get();
                     return true;
                 }
