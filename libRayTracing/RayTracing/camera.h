@@ -61,7 +61,7 @@ namespace ray_tracing
         vec3 u, v, w;
 
     public:
-        float lens_radius;
+        float lens_radius{};
     };
 
 }

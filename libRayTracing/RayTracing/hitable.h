@@ -14,7 +14,7 @@ namespace ray_tracing
         vec3 position;
         vec3 normal;
         bool front_face;
-        material *mat_ptr;
+        material *mat_ptr{nullptr};
     };
 
     class hittable
@@ -47,31 +47,22 @@ namespace ray_tracing
 
         virtual bool hit(const ray &ray, float t_min, float t_max, hit_record &out_record) const
         {
-            std::vector<bool> is_hit(list.size());
-            std::vector<hit_record> hit_records(list.size());
-            std::vector<int> indices(list.size());
-
-            std::iota(indices.begin(), indices.end(), 0);
-            std::transform(std::execution::par_unseq,
-                           indices.begin(), indices.end(),
-                           is_hit.begin(),
-                           [&](int i) -> bool
-                           { return list[i]->hit(ray, t_min, t_max, hit_records[i]); });
-
-            hit_record *temp_rec;
             bool hit_anything = false;
             float close_so_far = t_max;
-            for (int i = 0; i < indices.size(); ++i)
+            hit_record temp_record;
+
+            for (auto it = list.begin(); it != list.end(); it++)
             {
-                if (is_hit[i] && hit_records[i].ray_parameter < close_so_far)
-                {
-                    hit_anything = true;
-                    temp_rec = &hit_records[i];
-                    close_so_far = hit_records[i].ray_parameter;
-                }
+                auto &hittable_ptr = *it;
+                if (hittable_ptr->hit(ray, t_min, close_so_far, temp_record))
+                    if (temp_record.ray_parameter < close_so_far)
+                    {
+                        hit_anything = true;
+                        out_record = temp_record;
+                        close_so_far = temp_record.ray_parameter;
+                    }
             }
-            if (hit_anything)
-                out_record = *temp_rec;
+
             return hit_anything;
         }
     };
