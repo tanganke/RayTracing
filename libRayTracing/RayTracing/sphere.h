@@ -6,9 +6,14 @@ namespace ray_tracing
 {
     class sphere : public hittable
     {
-    public:
+    private:
+        mutable std::shared_ptr<aabb> aabb_ptr{nullptr};
+
+    protected:
         vec3 center;
         float radius;
+
+    public:
         std::shared_ptr<material> mat;
 
         sphere(vec3 center_, float radius_) : center(center_), radius(radius_) {}
@@ -19,6 +24,13 @@ namespace ray_tracing
 
         virtual bool hit(const ray &r, float t_min, float t_max, hit_record &out_record) const override
         {
+            {
+                aabb temp_aabb;
+                if (bounding_box(temp_aabb))
+                    if (!temp_aabb.hit(r, t_min, t_max))
+                        return false;
+            }
+
             vec3 oc = r.origin() - center;
             float a = dot(r.direction, r.direction);
             float b = 2 * dot(oc, r.direction);
@@ -55,6 +67,19 @@ namespace ray_tracing
                 }
             }
             return false;
+        }
+
+        virtual bool bounding_box(aabb &out_aabb) const override
+        {
+            if (aabb_ptr)
+                out_aabb = *aabb_ptr;
+            else
+            {
+                float r = std::abs(radius);
+                aabb_ptr.reset(new aabb(center - r, center + r));
+                out_aabb = *aabb_ptr;
+            }
+            return true;
         }
     };
 
