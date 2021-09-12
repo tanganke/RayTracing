@@ -1,6 +1,6 @@
 #pragma once
 #include "material.h"
-#include "hitable.h"
+#include "hittable.h"
 
 namespace ray_tracing
 {

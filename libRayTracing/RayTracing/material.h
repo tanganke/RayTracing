@@ -1,11 +1,13 @@
 #pragma once
 #include "ray.h"
-#include "hitable.h"
+#include "hittable.h"
 #include "random.h"
+#include "texture.h"
+#include <boost/variant.hpp>
 
 namespace ray_tracing
 {
-    
+
     class material
     {
     public:
@@ -26,18 +28,24 @@ namespace ray_tracing
     class lambertian : public material
     {
     public:
-        vec3 albedo;
+        boost::variant<vec3, std::shared_ptr<texture>> albedo;
         float fuzziness;
 
     public:
-        lambertian(const vec3 &albedo_color, float fuzziness_ = 0, bool reflectable_ = true)
+        lambertian(const vec3 &albedo_color, float fuzziness_ = 1)
             : albedo(albedo_color), fuzziness(fuzziness_) {}
+        lambertian(std::shared_ptr<texture> tex, float fuzziness_ = 1)
+            : albedo(tex), fuzziness(fuzziness_) {}
+
         virtual bool scatter(const ray &r_in, const hit_record &rec,
                              vec3 &out_color, ray &out_scattered) const override
         {
-            out_color = albedo;
 
-            auto target = rec.position + rec.normal + random_vec3_in_unit_sphere();
+            if (const vec3 *albedo_ptr = boost::get<vec3>(&albedo))
+                out_color = *albedo_ptr;
+            else if (const std::shared_ptr<texture> *albedo_ptr = boost::get<std::shared_ptr<texture>>(&albedo))
+                out_color = (*albedo_ptr)->value(0, 0, rec.position);
+            auto target = rec.position + rec.normal + fuzziness * random_vec3_in_unit_sphere();
             out_scattered = ray(rec.position, target - rec.position);
             return true;
         }

@@ -24,13 +24,6 @@ namespace ray_tracing
 
         virtual bool hit(const ray &r, float t_min, float t_max, hit_record &out_record) const override
         {
-            {
-                aabb temp_aabb;
-                if (bounding_box(temp_aabb))
-                    if (!temp_aabb.hit(r, t_min, t_max))
-                        return false;
-            }
-
             vec3 oc = r.origin() - center;
             float a = dot(r.direction, r.direction);
             float b = 2 * dot(oc, r.direction);

@@ -64,15 +64,14 @@ namespace ray_tracing
 
         virtual bool hit(const ray &ray, float t_min, float t_max, hit_record &out_record) const
         {
-            bool hit_anything = false;
-            float close_so_far = t_max;
-            hit_record temp_record;
             aabb temp_aabb;
-
             if (bounding_box(temp_aabb))
                 if (!temp_aabb.hit(ray, t_min, t_max))
                     return false;
-            temp_aabb.clear();
+
+            bool hit_anything = false;
+            float close_so_far = t_max;
+            hit_record temp_record;
 
             for (auto it = list.begin(); it != list.end(); it++)
             {
