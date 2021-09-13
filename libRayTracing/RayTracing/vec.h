@@ -40,4 +40,6 @@ namespace ray_tracing
     extern const float DEGREE;
     inline float radian_to_degree(float radians) { return radians / DEGREE; }
     inline float degree_to_radian(float degrees) { return degrees * DEGREE; }
+
+    inline float fractional_part(float x) { return x > 0 ? x - std::floor(x) : x - std::ceil(x); }
 }

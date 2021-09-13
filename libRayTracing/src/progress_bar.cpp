@@ -4,7 +4,7 @@ using namespace indicators;
 
 namespace ray_tracing
 {
-    ProgressBar::ProgressBar(const std::string &prefix_text) : indicators::ProgressBar{
+    progress_bar::progress_bar(const std::string &prefix_text) : indicators::ProgressBar{
                                                                    option::BarWidth{50},
                                                                    option::Start{" ["},
                                                                    option::Fill{"█"},

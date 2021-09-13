@@ -4,7 +4,7 @@
 
 TEST_CASE("progress_bar")
 {
-    ray_tracing::ProgressBar bar("Rendering");
+    ray_tracing::progress_bar bar("Rendering");
     while (true)
     {
         bar.tick();

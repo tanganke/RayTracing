@@ -36,3 +36,9 @@ TEST_CASE("ppm_test", "[ppm_test]")
             std::cout << ir << ' ' << ig << ' ' << ib << '\n';
         }
 }
+
+TEST_CASE("fractional_part")
+{
+    REQUIRE(std::abs(fractional_part(-2.4) - -0.4) < 0.01);
+    REQUIRE(std::abs(fractional_part(2.4) - 0.4) < 0.01);
+}

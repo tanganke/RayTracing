@@ -2,10 +2,10 @@
 
 namespace ray_tracing
 {
-    class ProgressBar : public indicators::ProgressBar
+    class progress_bar : public indicators::ProgressBar
     {
     public:
-        ProgressBar() : ProgressBar(std::string{""}) {}
-        ProgressBar(const std::string &prefix_text);
+        progress_bar() : progress_bar(std::string{""}) {}
+        progress_bar(const std::string &prefix_text);
     };
 }
