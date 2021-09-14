@@ -16,6 +16,11 @@ namespace ray_tracing
         perlin_noise_texture() = default;
         virtual vec3 value(float u, float v, const vec3 &p) const override
         {
+            return vec3(1, 1, 1) * noise(p);
+        }
+
+        float noise(const vec3 &p) const
+        {
             float (*noise_func)(const vec3 &p);
             switch (smooth)
             {
@@ -33,10 +38,8 @@ namespace ray_tracing
                 noise_func = &perlin_noise;
                 break;
             }
-            if (smooth == 3)
-                return vec3(1, 1, 1) * 0.5 * (1 + noise_func(scale * p));
-            else
-                return vec3(1, 1, 1) * noise_func(scale * p);
+
+            return noise_func(scale * p);
         }
 
         /**
@@ -47,5 +50,30 @@ namespace ray_tracing
          */
         int smooth{3};
         float scale{1};
+    };
+
+    class turbulence_noise_texture : public perlin_noise_texture
+    {
+        float turb(const vec3 &p, int depth) const
+        {
+            float accum = 0;
+            vec3 temp_p = p;
+            float weight = 1;
+            for (int i = 0; i < depth; i++)
+            {
+                accum += weight * noise(temp_p);
+                weight *= 0.5;
+                temp_p *= 2;
+            }
+            return std::abs(accum);
+        }
+
+    public:
+        virtual vec3 value(float u, float v, const vec3 &p) const override
+        {
+            return vec3(1, 1, 1) * turb(p, depth); //! not correct
+        }
+
+        int depth{7};
     };
 }

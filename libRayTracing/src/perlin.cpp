@@ -128,7 +128,7 @@ namespace ray_tracing
 
     float perlin_noise_hermite_cubic_vec(const vec3 &p)
     {
-        static const auto trilinear_interp = [](vec3 c[2][2][2], float u, float v, float w) -> float
+        static const auto perlin_interp = [](vec3 c[2][2][2], float u, float v, float w) -> float
         {
             float uu = u * u * (3 - 2 * u);
             float vv = v * v * (3 - 2 * v);
@@ -140,9 +140,9 @@ namespace ray_tracing
                     for (int k = 0; k < 2; k++)
                     {
                         vec3 weight_v{u - i, v - j, w - k};
-                        accum += (i * u + (1 - i) * (1 - u)) *
-                                 (j * v + (1 - j) * (1 - v)) *
-                                 (k * w + (1 - k) * (1 - w)) * dot(c[i][j][k], weight_v);
+                        accum += (i * uu + (1 - i) * (1 - uu)) *
+                                 (j * vv + (1 - j) * (1 - vv)) *
+                                 (k * ww + (1 - k) * (1 - ww)) * dot(c[i][j][k], weight_v);
                     }
             return accum;
         };
@@ -161,6 +161,6 @@ namespace ray_tracing
                 for (int dk = 0; dk < 2; dk++)
                     c[di][dj][dk] = ranvec[perm_x[(i + di) & 255] ^ perm_y[(j + dj) & 255] ^ perm_z[(k + dk) & 255]];
 
-        return trilinear_interp(c, u, v, w);
+        return 0.5 * (1 + perlin_interp(c, u, v, w));
     }
 }
