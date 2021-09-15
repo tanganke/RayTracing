@@ -21,6 +21,12 @@ namespace ray_tracing
             higher_bound = higher;
         }
 
+        inline vec3 &min() { return lower_bound; }
+        inline vec3 &max() { return higher_bound; }
+
+        inline const vec3 &min() const { return lower_bound; }
+        inline const vec3 &max() const { return higher_bound; }
+
         bool hit(const ray &r, float t_min, float t_max) const
         {
             for (int i = 0; i < 3; ++i)
@@ -34,6 +40,12 @@ namespace ray_tracing
                     return false;
             }
             return true;
+        }
+
+        inline void translate(const vec3 &displacement)
+        {
+            lower_bound += displacement;
+            higher_bound += displacement;
         }
 
         inline void clear()
