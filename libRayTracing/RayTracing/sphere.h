@@ -4,6 +4,8 @@
 
 namespace ray_tracing
 {
+    vec2 get_unit_sphere_uv(const vec3 &p);
+
     class sphere : public hittable
     {
     private:
@@ -43,6 +45,7 @@ namespace ray_tracing
                     else
                         out_record.front_face = false;
                     out_record.mat_ptr = mat.get();
+                    out_record.uv_coord = get_uv(out_record.position);
                     return true;
                 }
                 temp = (-b + sqrt(discriminant)) / (2 * a);
@@ -56,6 +59,7 @@ namespace ray_tracing
                     else
                         out_record.front_face = true;
                     out_record.mat_ptr = mat.get();
+                    out_record.uv_coord = get_uv(out_record.position);
                     return true;
                 }
             }
@@ -73,6 +77,11 @@ namespace ray_tracing
                 out_aabb = *aabb_ptr;
             }
             return true;
+        }
+
+        inline vec2 get_uv(const vec3 &position) const
+        {
+            return get_unit_sphere_uv((position - center) / radius);
         }
     };
 

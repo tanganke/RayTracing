@@ -11,23 +11,32 @@ namespace ray_tracing
         {
             ray scattered;
             vec3 attenuation;
+
             if (depth < 50)
             {
-                if (rec.mat_ptr && rec.mat_ptr->scatter(r, rec, attenuation, scattered))
-                    return attenuation * ray_color(scattered, world, depth + 1);
+                if (rec.mat_ptr)
+                {
+                    vec3 emmitted = rec.mat_ptr->emmitted(rec);
+                    if (rec.mat_ptr->scatter(r, rec, attenuation, scattered))
+                        return attenuation * ray_color(scattered, world, depth + 1) + emmitted;
+                    else
+                        return emmitted;
+                }
                 else
                     return DEBUG_COLOR;
             }
             else
             {
-                return vec3{0, 0, 0};
+                return vec3{1, 1, 1};
             }
         }
         else
         {
-            vec3 unit_direction = unit_vector(r.direction);
-            float t = 0.5 * (unit_direction.y + 1.0);
-            return (1.0 - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0);
+
+            // vec3 unit_direction = unit_vector(r.direction);
+            // float t = 0.5 * (unit_direction.y + 1.0);
+            // return (1.0 - t) * vec3(1.0, 1.0, 1.0) + t * vec3(0.5, 0.7, 1.0);
+            return vec3{0, 0, 0};
         }
     }
 

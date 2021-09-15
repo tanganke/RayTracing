@@ -1,3 +1,4 @@
+#pragma once
 #include <indicators/indicators.hpp>
 
 namespace ray_tracing

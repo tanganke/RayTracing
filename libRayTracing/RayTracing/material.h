@@ -23,6 +23,8 @@ namespace ray_tracing
          */
         virtual bool scatter(const ray &r_in, const hit_record &rec,
                              vec3 &out_color, ray &out_scattered) const = 0;
+
+        virtual vec3 emmitted(const hit_record &rec) const { return vec3{0, 0, 0}; }
     };
 
     class lambertian : public material
@@ -44,7 +46,7 @@ namespace ray_tracing
             if (const vec3 *albedo_ptr = boost::get<vec3>(&albedo))
                 out_color = *albedo_ptr;
             else if (const std::shared_ptr<texture> *albedo_ptr = boost::get<std::shared_ptr<texture>>(&albedo))
-                out_color = (*albedo_ptr)->value(0, 0, rec.position);
+                out_color = (*albedo_ptr)->value(rec.uv_coord[0], rec.uv_coord[1], rec.position);
             auto target = rec.position + rec.normal + fuzziness * random_vec3_in_unit_sphere();
             out_scattered = ray(rec.position, target - rec.position);
             return true;
@@ -61,7 +63,7 @@ namespace ray_tracing
         metal(const vec3 &albedo_, float fuzz_ = 0) : albedo(albedo_), fuzziness(fuzz_)
         {
             fuzziness = fuzz_;
-            fuzziness = clamp(fuzziness, 0, 1);
+            fuzziness = clamp<float>(fuzziness, 0, 1);
         }
 
         virtual bool scatter(const ray &r_in, const hit_record &rec, vec3 &out_color, ray &out_scattered) const

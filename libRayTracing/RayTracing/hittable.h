@@ -16,6 +16,7 @@ namespace ray_tracing
         vec3 normal;
         bool front_face;
         material *mat_ptr{nullptr};
+        vec2 uv_coord;
     };
 
     class hittable
@@ -62,7 +63,7 @@ namespace ray_tracing
             return *this;
         }
 
-        virtual bool hit(const ray &ray, float t_min, float t_max, hit_record &out_record) const
+        virtual bool hit(const ray &ray, float t_min, float t_max, hit_record &out_record) const override
         {
             aabb temp_aabb;
             if (bounding_box(temp_aabb))
@@ -76,8 +77,8 @@ namespace ray_tracing
             for (auto it = list.begin(); it != list.end(); it++)
             {
                 auto &hittable_ptr = *it;
-                if (hittable_ptr->bounding_box(temp_aabb) && !temp_aabb.hit(ray, t_min, t_max))
-                    continue;
+                // if (hittable_ptr->bounding_box(temp_aabb) && !temp_aabb.hit(ray, t_min, t_max))
+                //     continue;
                 if (hittable_ptr->hit(ray, t_min, close_so_far, temp_record))
                     if (temp_record.ray_parameter < close_so_far)
                     {

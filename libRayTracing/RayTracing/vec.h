@@ -15,6 +15,8 @@ namespace ray_tracing
     using glm::dot;
     using glm::mat3;
     using glm::mat4;
+    using glm::uvec2;
+    using glm::uvec3;
     using glm::vec2;
     using glm::vec3;
     using glm::vec4;
@@ -35,7 +37,8 @@ namespace ray_tracing
     vec3 refract(const vec3 &v, const vec3 &n, float ni_over_nt);
     vec3 refract(const vec3 &v, const vec3 &n, float ni_over_nt, bool &is_total_reflection);
 
-    inline float clamp(float value, float min, float max) { return std::max(std::min(value, max), min); }
+    template <typename T>
+    inline T clamp(T value, T min, T max) { return std::max(std::min(value, max), min); }
 
     extern const float DEGREE;
     inline float radian_to_degree(float radians) { return radians / DEGREE; }
