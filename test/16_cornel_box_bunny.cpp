@@ -25,9 +25,9 @@ using namespace ray_tracing;
 
 TEST_CASE("cornell_box_bunny", "[cornell_box]")
 {
-    int nx{800};
-    int ny{800};
-    int ns{2000};
+    int nx{200};
+    int ny{200};
+    int ns{100};
 
     vec3 look_from{278, 278, -800};
     vec3 look_at{278, 278, 0};
@@ -44,6 +44,7 @@ TEST_CASE("cornell_box_bunny", "[cornell_box]")
     auto white = std::make_shared<lambertian>(tex_white);
     auto green = std::make_shared<lambertian>(tex_green);
     auto glass = std::make_shared<dielectric>(1.5);
+    auto metal_earth = std::make_shared<metal>(std::make_shared<image_texture>("data/earth.jpg"));
 
     hittable_vector world;
     world.push_back(std::make_shared<zx_rect>(213, 343, 227, 332, 554, light))     // top light
@@ -98,7 +99,8 @@ TEST_CASE("cornell_box_bunny", "[cornell_box]")
         bunny_glass->bounding_box(bbox);
         y_min = bbox.lower_bound.y;
     }
-    world.push_back(std::make_shared<translate>(bunny_glass, vec3{0, -y_min, 0}))
+    world.push_back(std::make_shared<sphere>(vec3{277, 277, 277}, 100, metal_earth))
+        .push_back(std::make_shared<translate>(bunny_glass, vec3{0, -y_min, 0}))
         .push_back(std::make_shared<translate>(bunny_red, vec3{150, -y_min, 0}))
         .push_back(std::make_shared<translate>(bunny_green, vec3{-150, -y_min, 0}));
 

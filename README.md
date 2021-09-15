@@ -1,6 +1,6 @@
 # Ray Tracing 
 
-contact: [Anke Tang](mailto:tang.anke@foxmail.com)
+[Contact Author](mailto:tang.anke@foxmail.com)
 
 ## Test Results
 
@@ -14,6 +14,7 @@ contact: [Anke Tang](mailto:tang.anke@foxmail.com)
 reference:
 
 - https://github.com/RayTracing/raytracing.github.io
+- Fundamentals of Computer Graphics, Fourth Edition by Marschner, Steve Shirley, Peter
 
 requirements:
 
@@ -25,5 +26,7 @@ library dependencies:
 - glm : vector and matrix(*column major*) data types, linear algebra algorithms
 - stb_image/stb_image_write : read/write image
 - assimp : import 3D model
+- boost
 - [indicators](https://github.com/p-ranav/indicators)
 - [catch2](https://github.com/catchorg/Catch2)
+

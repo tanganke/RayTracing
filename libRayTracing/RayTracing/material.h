@@ -56,13 +56,16 @@ namespace ray_tracing
     class metal : public material
     {
     public:
-        vec3 albedo;
+        boost::variant<vec3, std::shared_ptr<texture>> albedo;
         float fuzziness;
 
     public:
         metal(const vec3 &albedo_, float fuzz_ = 0) : albedo(albedo_), fuzziness(fuzz_)
         {
-            fuzziness = fuzz_;
+            fuzziness = clamp<float>(fuzziness, 0, 1);
+        }
+        metal(const std::shared_ptr<texture> &albedo_, float fuzz_ = 0) : albedo(albedo_), fuzziness(fuzz_)
+        {
             fuzziness = clamp<float>(fuzziness, 0, 1);
         }
 
@@ -70,14 +73,15 @@ namespace ray_tracing
         {
             vec3 reflected = reflect(unit_vector(r_in.direction), rec.normal);
             if (fuzziness > 0)
-            {
                 out_scattered = ray(rec.position, reflected + fuzziness * random_vec3_in_unit_sphere());
-            }
             else
-            {
                 out_scattered = ray(rec.position, reflected);
-            }
-            out_color = albedo;
+
+            if (const vec3 *albedo_ptr = boost::get<vec3>(&albedo))
+                out_color = *albedo_ptr;
+            else if (const std::shared_ptr<texture> *albedo_ptr = boost::get<std::shared_ptr<texture>>(&albedo))
+                out_color = (*albedo_ptr)->value(rec.uv_coord[0], rec.uv_coord[1], rec.position);
+
             return dot(out_scattered.direction, rec.normal) > 0;
         }
     };

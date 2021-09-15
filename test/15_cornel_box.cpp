@@ -21,9 +21,9 @@ using namespace ray_tracing;
 
 TEST_CASE("cornell_box", "[cornell_box]")
 {
-    int nx{800};
-    int ny{800};
-    int ns{200};
+    int nx{200};
+    int ny{200};
+    int ns{100};
 
     vec3 look_from{278, 278, -800};
     vec3 look_at{278, 278, 0};
@@ -53,9 +53,9 @@ TEST_CASE("cornell_box", "[cornell_box]")
 
 TEST_CASE("cornell_box_with_cuboid", "[cornell_box]")
 {
-    int nx{800};
-    int ny{800};
-    int ns{200};
+    int nx{200};
+    int ny{200};
+    int ns{100};
 
     vec3 look_from{278, 278, -800};
     vec3 look_at{278, 278, 0};
@@ -87,9 +87,9 @@ TEST_CASE("cornell_box_with_cuboid", "[cornell_box]")
 
 TEST_CASE("cornell_box_with_cuboid_translate", "[cornell_box]")
 {
-    int nx{800};
-    int ny{800};
-    int ns{200};
+    int nx{200};
+    int ny{200};
+    int ns{100};
 
     vec3 look_from{278, 278, -800};
     vec3 look_at{278, 278, 0};
@@ -124,9 +124,9 @@ TEST_CASE("cornell_box_with_cuboid_translate", "[cornell_box]")
 
 TEST_CASE("cornell_box_with_cuboid_rotate", "[cornell_box]")
 {
-    int nx{800};
-    int ny{800};
-    int ns{800};
+    int nx{200};
+    int ny{200};
+    int ns{100};
 
     vec3 look_from{278, 278, -800};
     vec3 look_at{278, 278, 0};
@@ -142,6 +142,7 @@ TEST_CASE("cornell_box_with_cuboid_rotate", "[cornell_box]")
     auto red = std::make_shared<lambertian>(tex_red);
     auto white = std::make_shared<lambertian>(tex_white);
     auto green = std::make_shared<lambertian>(tex_green);
+    auto glass = std::make_shared<dielectric>(1.5);
 
     hittable_vector world;
     world.push_back(std::make_shared<zx_rect>(213, 343, 227, 332, 554, light))     // top light
@@ -152,17 +153,28 @@ TEST_CASE("cornell_box_with_cuboid_rotate", "[cornell_box]")
         .push_back(std::make_shared<zx_rect>(0, 555, 0, 555, 0, white))            // bottom
         .push_back(std::make_shared<zx_rect>(0, 555, 0, 555, 555, white))          // top
         .push_back(std::make_shared<xy_rect>(0, 555, 0, 555, 555, white));         // front
-    world.push_back(std::make_shared<axis_aligned_cuboid>(vec3{130, 0, 65}, vec3{295, 165, 230}, white));
-    world.push_back(std::make_shared<axis_aligned_cuboid>(vec3{265, 0, 295}, vec3{430, 330, 460}, white));
-    auto center = (vec3{265, 0, 295} + vec3{430, 330, 460}) / 2;
-    world.push_back(
-        std::make_shared<translate>(
-            std::make_shared<rotate_y>(
-                std::make_shared<translate>(
-                    std::make_shared<axis_aligned_cuboid>(vec3{265, 0, 295}, vec3{430, 330, 460}, white),
-                    -center),
-                degree_to_radian(45)),
-            center));
+    {
+        auto center = (vec3{130, 0, 65} + vec3{295, 165, 230}) / 2;
+        world.push_back(
+            std::make_shared<translate>(
+                std::make_shared<rotate_y>(
+                    std::make_shared<translate>(
+                        std::make_shared<axis_aligned_cuboid>(vec3{130, 0, 65}, vec3{295, 165, 230}, glass),
+                        -center),
+                    degree_to_radian(60)),
+                center));
+    }
+    {
+        auto center = (vec3{265, 0, 295} + vec3{430, 330, 460}) / 2;
+        world.push_back(
+            std::make_shared<translate>(
+                std::make_shared<rotate_y>(
+                    std::make_shared<translate>(
+                        std::make_shared<axis_aligned_cuboid>(vec3{265, 0, 295}, vec3{430, 330, 460}, white),
+                        -center),
+                    degree_to_radian(45)),
+                center));
+    }
 
     auto image_data = render(nx, ny, ns, cam, world);
     stbi_write_png("cornell_box_with_cuboid_rotate.png", nx, ny, 3, (void *)&image_data[0], 0);
