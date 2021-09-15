@@ -27,7 +27,7 @@ namespace ray_tracing
             }
             else
             {
-                return vec3{1, 1, 1};
+                return vec3{0, 0, 0};
             }
         }
         else

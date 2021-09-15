@@ -1,5 +1,12 @@
 # Ray Tracing
 
+## Test Results
+
+![](README.assert/../cornell_box_with_cuboid_translate.png)
+![](README.asserts/cornell_box_with_cuboid_rotate.png)
+
+## Notes
+
 reference:
 
 - https://github.com/RayTracing/raytracing.github.io

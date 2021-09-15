@@ -18,5 +18,5 @@ add_subdirectory(libRayTracing)
 # These tests can use the Catch2-provided main
 file(GLOB SOURCES ${CMAKE_CURRENT_LIST_DIR}/test/*.cpp)
 add_executable(test ${SOURCES})
-target_link_libraries(test PUBLIC RayTracing)
+target_link_libraries(test PUBLIC RayTracing assimp)
 

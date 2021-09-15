@@ -27,6 +27,16 @@ namespace ray_tracing
         inline const vec3 &min() const { return lower_bound; }
         inline const vec3 &max() const { return higher_bound; }
 
+        aabb &push_back(const vec3 &p)
+        {
+            for (int i = 0; i < 3; ++i)
+            {
+                lower_bound[i] = std::min(lower_bound[i], p[i]);
+                higher_bound[i] = std::max(higher_bound[i], p[i]);
+            }
+            return *this;
+        }
+
         bool hit(const ray &r, float t_min, float t_max) const
         {
             for (int i = 0; i < 3; ++i)

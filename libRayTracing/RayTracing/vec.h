@@ -14,7 +14,7 @@ namespace ray_tracing
     using glm::cross;
     using glm::dot;
     using glm::mat3;
-    using glm::mat4;
+    using glm::mat4; // column major
     using glm::uvec2;
     using glm::uvec3;
     using glm::vec2;
