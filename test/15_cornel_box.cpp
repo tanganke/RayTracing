@@ -144,16 +144,16 @@ TEST_CASE("cornell_box_with_cuboid_rotate", "[cornell_box]")
     auto green = std::make_shared<lambertian>(tex_green);
 
     hittable_vector world;
-    world.push_back(std::make_shared<zx_rect>(213, 343, 227, 332, 554, light)) // top light
-        .push_back(std::make_shared<yz_rect>(213, 343, 227, 332, 554, light_blue))  // left light
-        .push_back(std::make_shared<yz_rect>(213, 343, 227, 332, 1, light_blue))    // right light
-        .push_back(std::make_shared<yz_rect>(0, 555, 0, 555, 555, green))      // left
-        .push_back(std::make_shared<yz_rect>(0, 555, 0, 555, 0, red))          // right
-        .push_back(std::make_shared<zx_rect>(0, 555, 0, 555, 0, white))        // bottom
-        .push_back(std::make_shared<zx_rect>(0, 555, 0, 555, 555, white))      // top
-        .push_back(std::make_shared<xy_rect>(0, 555, 0, 555, 555, white));     // front
+    world.push_back(std::make_shared<zx_rect>(213, 343, 227, 332, 554, light))     // top light
+        .push_back(std::make_shared<yz_rect>(213, 343, 227, 332, 554, light_blue)) // left light
+        .push_back(std::make_shared<yz_rect>(213, 343, 227, 332, 1, light_blue))   // right light
+        .push_back(std::make_shared<yz_rect>(0, 555, 0, 555, 555, green))          // left
+        .push_back(std::make_shared<yz_rect>(0, 555, 0, 555, 0, red))              // right
+        .push_back(std::make_shared<zx_rect>(0, 555, 0, 555, 0, white))            // bottom
+        .push_back(std::make_shared<zx_rect>(0, 555, 0, 555, 555, white))          // top
+        .push_back(std::make_shared<xy_rect>(0, 555, 0, 555, 555, white));         // front
     world.push_back(std::make_shared<axis_aligned_cuboid>(vec3{130, 0, 65}, vec3{295, 165, 230}, white));
-    // world.push_back(std::make_shared<axis_aligned_cuboid>(vec3{265, 0, 295}, vec3{430, 330, 460}, white));
+    world.push_back(std::make_shared<axis_aligned_cuboid>(vec3{265, 0, 295}, vec3{430, 330, 460}, white));
     auto center = (vec3{265, 0, 295} + vec3{430, 330, 460}) / 2;
     world.push_back(
         std::make_shared<translate>(
