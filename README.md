@@ -1,9 +1,13 @@
-# Ray Tracing
+# Ray Tracing 
+
+contact: [Anke Tang](mailto:tang.anke@foxmail.com)
 
 ## Test Results
 
-![](README.assert/../cornell_box_with_cuboid_translate.png)
+![](README.asserts/cornell_box.png)
+![](README.asserts/cornell_box_with_cuboid.png)
 ![](README.asserts/cornell_box_with_cuboid_rotate.png)
+![](README.asserts/cornell_box_bunny.png)
 
 ## Notes
 
@@ -18,8 +22,8 @@ requirements:
 
 library dependencies:
 
-- glm
-- stb_image
-- stb_image_write
+- glm : vector and matrix(*column major*) data types, linear algebra algorithms
+- stb_image/stb_image_write : read/write image
+- assimp : import 3D model
 - [indicators](https://github.com/p-ranav/indicators)
 - [catch2](https://github.com/catchorg/Catch2)
