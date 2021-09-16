@@ -69,7 +69,7 @@ namespace ray_tracing
             fuzziness = clamp<float>(fuzziness, 0, 1);
         }
 
-        virtual bool scatter(const ray &r_in, const hit_record &rec, vec3 &out_color, ray &out_scattered) const
+        virtual bool scatter(const ray &r_in, const hit_record &rec, vec3 &out_color, ray &out_scattered) const override
         {
             vec3 reflected = reflect(unit_vector(r_in.direction), rec.normal);
             if (fuzziness > 0)
@@ -89,14 +89,22 @@ namespace ray_tracing
     class dielectric : public material
     {
     public:
+        boost::variant<vec3, std::shared_ptr<texture>> albedo;
         float index_of_refraction;
 
     public:
-        dielectric(float index_of_refraction_) : index_of_refraction{index_of_refraction_} {}
+        dielectric(float index_of_refraction_)
+            : index_of_refraction{index_of_refraction_} { albedo = vec3{1, 1, 1}; }
+        dielectric(boost::variant<vec3, std::shared_ptr<texture>> albedo_, float index_of_refraction_)
+            : albedo{albedo_}, index_of_refraction{index_of_refraction_} {}
 
-        virtual bool scatter(const ray &r_in, const hit_record &rec, vec3 &out_color, ray &out_scattered) const
+        virtual bool scatter(const ray &r_in, const hit_record &rec, vec3 &out_color, ray &out_scattered) const override
         {
-            out_color = vec3{1, 1, 1};
+            if (const vec3 *albedo_ptr = boost::get<vec3>(&albedo))
+                out_color = *albedo_ptr;
+            else if (const std::shared_ptr<texture> *albedo_ptr = boost::get<std::shared_ptr<texture>>(&albedo))
+                out_color = (*albedo_ptr)->value(rec.uv_coord[0], rec.uv_coord[1], rec.position);
+
             float ni_over_nt = rec.front_face ? (1 / index_of_refraction) : index_of_refraction;
             bool is_total_reflection;
             auto refracted = refract(r_in.direction, rec.normal, ni_over_nt, is_total_reflection);
