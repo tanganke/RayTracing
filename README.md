@@ -1,7 +1,5 @@
 # Ray Tracing 
 
-[Contact Author](mailto:tang.anke@foxmail.com)
-
 ## Test Results
 
 ![](README.asserts/cornell_box.png)
